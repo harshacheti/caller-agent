@@ -56,7 +56,6 @@ const App = () => {
         webClient
           .startConversation({
             callId: registerCallResponse.callId,
-            sampleRate: registerCallResponse.sampleRate,
             enableUpdate: true,
           })
           .catch(console.error);
