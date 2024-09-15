@@ -35,13 +35,13 @@ const App = () => {
       setIsAgentSpeaking(false);
     });
 
-    WebClient.on("update", (update) => {
-    console.log(update);
-    });
+    // WebClient.on("update", (update) => {
+    // console.log(update);
+    // });
     
-    WebClient.on("metadata", (metadata) => {
-    console.log(metadata);
-    });
+    // WebClient.on("metadata", (metadata) => {
+    // console.log(metadata);
+    // });
 
     webClient.on("update", (update) => {
       console.log("update", update);
