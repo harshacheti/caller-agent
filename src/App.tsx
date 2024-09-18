@@ -2,21 +2,31 @@ import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
 import { RetellWebClient } from "retell-client-js-sdk";
 
-const agentId = process.env.REACT_APP_RETELL_AGENTID;
-
-interface RegisterCallResponse {
-  callId?: string;
-  sampleRate: number;
-}
-
 const webClient = new RetellWebClient();
 
 const App = () => {
   const [callStatus, setCallStatus] = useState<'not-started' | 'active' | 'inactive'>('not-started');
   const [isAgentSpeaking, setIsAgentSpeaking] = useState(false);
+  const [agentId, setAgentId] = useState<string | null>(null);
+  const [additionalParams, setAdditionalParams] = useState<Record<string, string>>({});
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Parse URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    setAgentId(id);
+
+    // Parse additional parameters
+    const params: Record<string, string> = {};
+    urlParams.forEach((value, key) => {
+      if (key !== 'id') {
+        params[key] = value;
+      }
+    });
+    setAdditionalParams(params);
+
+    // Set up event listeners
     webClient.on("conversationStarted", () => {
       console.log("conversationStarted");
       setCallStatus('active');
@@ -35,14 +45,6 @@ const App = () => {
       setIsAgentSpeaking(false);
     });
 
-    // WebClient.on("update", (update) => {
-    // console.log(update);
-    // });
-    
-    // WebClient.on("metadata", (metadata) => {
-    // console.log(metadata);
-    // });
-
     webClient.on("update", (update) => {
       console.log("update", update);
       if (update.turntaking === "user_turn") {
@@ -54,12 +56,17 @@ const App = () => {
   }, []);
 
   const toggleConversation = async () => {
+    if (!agentId) {
+      console.error("Agent ID is not available");
+      return;
+    }
+
     if (callStatus === 'active') {
       webClient.stopConversation();
     } else {
       setCallStatus('active');
       setIsAgentSpeaking(true);
-      const registerCallResponse = await registerCall(agentId);
+      const registerCallResponse = await registerCall(agentId, additionalParams);
       if (registerCallResponse.callId) {
         webClient
           .startConversation({
@@ -70,9 +77,9 @@ const App = () => {
       }
     }
   };
-  
-  async function registerCall(agentId: string): Promise<RegisterCallResponse> {
-    console.log("Registering call for agent:", agentId);
+
+  async function registerCall(agentId: string, params: Record<string, string>): Promise<RegisterCallResponse> {
+    console.log("Registering call for agent:", agentId, "with params:", params);
     try {
       const response = await fetch("/api/register-call", {
         method: "POST",
@@ -81,13 +88,12 @@ const App = () => {
         },
         body: JSON.stringify({
           agentId: agentId,
+          ...params
         }),
       });
-
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-
       const data: RegisterCallResponse = await response.json();
       console.log("Call registered successfully:", data);
       return data;
