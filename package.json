@@ -3,21 +3,25 @@
   "version": "1.1.0",
   "private": true,
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@material-ui/core": "^4.12.4",
+    "@mui/material": "^6.1.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/react": "^18.2.44",
     "@types/react-dom": "^18.2.17",
+    "axios": "^1.7.4",
     "buffer": "^6.0.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "node-fetch": "^2.6.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "retell-client-js-sdk": "1.3.3",
-    "stream": "^0.0.2",
-    "node-fetch": "^2.6.7",
-    "axios": "^1.7.4",
-    "cors": "^2.8.5",
-    "express": "^4.19.2"
+    "stream": "^0.0.2"
   },
   "devDependencies": {
     "@types/node": "^20.10.4"

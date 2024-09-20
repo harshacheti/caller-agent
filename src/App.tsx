@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./App.css";
 import { RetellWebClient } from "retell-client-js-sdk";
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+
 
 const webClient = new RetellWebClient();
 
@@ -106,6 +109,8 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
+      <img src={`${process.env.PUBLIC_URL}/logo3.png`} alt="Agent Portrait" />
+      <h3>You are speaking with Eva</h3>
         <div 
           ref={containerRef} 
           className={`portrait-container 
@@ -114,12 +119,27 @@ const App = () => {
             ${isAgentSpeaking ? 'agent-speaking' : ''}`}
           onClick={toggleConversation}
         >
+        <Stack spacing={1} 
+        sx={{
+            justifyContent: "center",
+            alignItems: "center",
+            }}>
           <img 
-            src={`${process.env.PUBLIC_URL}/Fiona_Round.png`}
+            src={`${process.env.PUBLIC_URL}/wave.gif`}
             alt="Agent Portrait" 
             className="agent-portrait"
           />
+          
+          <Button 
+              color={callStatus === 'active' ? "error" : "success"} 
+              variant="contained" 
+              size="medium"
+            >
+              {callStatus === 'active' ? "END CALL" : "START CALL"}
+            </Button>
+          </Stack>
         </div>
+        
       </header>
     </div>
   );
