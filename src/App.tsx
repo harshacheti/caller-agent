@@ -125,7 +125,7 @@ const App = () => {
             alignItems: "center",
             }}>
           <img 
-            src={`${process.env.PUBLIC_URL}/wave.gif`}
+            src={callStatus === 'active' ? '${process.env.PUBLIC_URL}/wave.gif' : '${process.env.PUBLIC_URL}/Fiona_Round.png'}
             alt="Agent Portrait" 
             className="agent-portrait"
           />
